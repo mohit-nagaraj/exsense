@@ -8,12 +8,15 @@ const userTypeDef = `#graphql
     profilePicture: String
     gender: String!
   }
-# queries which can be made to the user
+
+# Queries which can be made to the user
   type Query {
+    users: [User!]
     authUser: User
-    user(userId:ID!): User
+    user(userId: ID!): User
   }
-# muation which can be made to the user
+
+# Mutations which can be made to the user
   type Mutation {
     signUp(input: SignUpInput!): User
     login(input: LoginInput!): User

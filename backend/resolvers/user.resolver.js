@@ -3,9 +3,7 @@ import { users } from '../dummyData/data.js';
 
 const userResolver = {
 	Query: {
-		users: () => {
-			return users;
-		},
+		users: () => users,
 	},
 	Mutation: {},
 };
