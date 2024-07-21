@@ -1,6 +1,6 @@
 const transactionResolver = {
-    Query: {},
-    Mutation: {}
-}
+	Query: {},
+	Mutation: {},
+};
 
 export default transactionResolver;
