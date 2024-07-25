@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
 	return (
-		<div className='mb-10'>
+		<div className='mb-10 absolute top-0 w-screen'>
 			<h1 className='md:text-3xl text-xl lg:text-5xl font-bold text-center  relative z-50 text-white pt-10'>
 				Exsense <Link to='/'>GQL</Link>
 			</h1>
