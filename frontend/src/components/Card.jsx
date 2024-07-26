@@ -14,6 +14,7 @@ const categoryColorMap = {
 };
 
 const Card = ({ cardType }) => {
+    // better than to write if else
 	const cardClass = categoryColorMap[cardType];
 
 	return (
