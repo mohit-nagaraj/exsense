@@ -1,24 +1,46 @@
-import { Route, Routes } from "react-router-dom";
-import Homepage from "./pages/HomePage.jsx";
-import Loginpage from "./pages/LoginPage.jsx";
-import SignUppage from "./pages/SignUpPage.jsx";
-import TransactionPage from "./pages/TransactionPage.jsx";
-import NotFoundpage from "./pages/NotFoundPage.jsx";
-import Header from "./components/ui/Header.jsx";
+import { Navigate, Route, Routes } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import SignUpPage from "./pages/SignUpPage";
+import TransactionPage from "./pages/TransactionPage";
+import NotFoundPage from "./pages/NotFoundPage";
+import Header from "./components/ui/Header";
+import { useQuery } from "@apollo/client";
+import { GET_AUTHENTICATED_USER } from "./graphql/queries/user.query";
+import { Toaster } from "react-hot-toast";
 
 function App() {
-  const authUser = true;
+  const { loading, data } = useQuery(GET_AUTHENTICATED_USER);
+
+  if (loading) return null;
+
   return (
     <>
-      {authUser && <Header />}
+      {data?.authUser && <Header />}
       <Routes>
-        <Route path="/" element={<Homepage />} />
-        <Route path="/login" element={<Loginpage />} />
-        <Route path="/signup" element={<SignUppage />} />
-        <Route path="/transaction/:id" element={<TransactionPage />} />
-        <Route path="*" element={<NotFoundpage />} />
+        <Route
+          path="/"
+          element={data.authUser ? <HomePage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/login"
+          element={!data.authUser ? <LoginPage /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/signup"
+          element={!data.authUser ? <SignUpPage /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/transaction/:id"
+          element={
+            data.authUser ? <TransactionPage /> : <Navigate to="/login" />
+          }
+        />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      <Toaster />
     </>
   );
 }
+
 export default App;
