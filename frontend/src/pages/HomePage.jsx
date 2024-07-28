@@ -16,6 +16,7 @@ const HomePage = () => {
   const { data: authUserData } = useQuery(GET_AUTHENTICATED_USER);
 
 	const [logout, { loading, client }] = useMutation(LOGOUT, {
+    //so tht this info is refetched after this api, then get to kno user is not authed, thus redirect to login
 		refetchQueries: ["GetAuthenticatedUser"],
 	});
 
