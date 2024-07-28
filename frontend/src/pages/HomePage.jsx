@@ -5,10 +5,20 @@ import Cards from "../components/Cards";
 import TransactionForm from "../components/TransactionForm";
 
 import { MdLogout } from "react-icons/md";
+import toast from "react-hot-toast";
+import { useMutation, useQuery } from "@apollo/client";
+import { LOGOUT } from "../graphql/mutations/user.mutation";
+import { GET_AUTHENTICATED_USER } from "../graphql/queries/user.query";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const HomePage = () => {
+  const { data: authUserData } = useQuery(GET_AUTHENTICATED_USER);
+
+	const [logout, { loading, client }] = useMutation(LOGOUT, {
+		refetchQueries: ["GetAuthenticatedUser"],
+	});
+
   const chartData = {
     labels: ["Saving", "Expense", "Investment"],
     datasets: [
@@ -43,11 +53,17 @@ const HomePage = () => {
     },
   };
 
-  const handleLogout = () => {
-    console.log("Logging out...");
+  const handleLogout = async () => {
+    try {
+			await logout();
+			// Clear the Apollo Client cache FROM THE DOCS
+			// https://www.apollographql.com/docs/react/caching/advanced-topics/#:~:text=Resetting%20the%20cache,any%20of%20your%20active%20queries
+			client.resetStore();
+		} catch (error) {
+			console.error("Error logging out:", error);
+			toast.error(error.message);
+		}
   };
-
-  const loading = false;
 
   return (
     <>
@@ -68,7 +84,7 @@ const HomePage = () => {
               <div className="w-6 h-6 border-t-2 border-b-2 mx-2 rounded-full animate-spin"></div>
             )}
             <img
-              src={"https://tecdn.b-cdn.net/img/new/avatars/2.webp"}
+              src={authUserData?.authUser.profilePicture}
               className="w-11 h-11 rounded-full border cursor-pointer"
               alt="Avatar"
             />
