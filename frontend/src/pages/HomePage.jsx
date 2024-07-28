@@ -17,61 +17,63 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const HomePage = () => {
   const { data: authUserData } = useQuery(GET_AUTHENTICATED_USER);
   const { data } = useQuery(GET_TRANSACTION_STATISTICS);
-  
-	const [logout, { loading, client }] = useMutation(LOGOUT, {
+
+  const [logout, { loading, client }] = useMutation(LOGOUT, {
     //so tht this info is refetched after this api, then get to kno user is not authed, thus redirect to login
-		refetchQueries: ["GetAuthenticatedUser"],
-	});
+    refetchQueries: ["GetAuthenticatedUser"],
+  });
 
   const [chartData, setChartData] = useState({
-		labels: [],
-		datasets: [
-			{
-				label: "₹",
-				data: [],
-				backgroundColor: [],
-				borderColor: [],
-				borderWidth: 1,
-				borderRadius: 30,
-				spacing: 10,
-				cutout: 130,
-			},
-		],
-	});
+    labels: [],
+    datasets: [
+      {
+        label: "₹",
+        data: [],
+        backgroundColor: [],
+        borderColor: [],
+        borderWidth: 1,
+        borderRadius: 30,
+        spacing: 10,
+        cutout: 130,
+      },
+    ],
+  });
   useEffect(() => {
-		if (data?.categoryStatistics) {
-			const categories = data.categoryStatistics.map((stat) => stat.category);
-			const totalAmounts = data.categoryStatistics.map((stat) => stat.totalAmount);
+    if (data?.categoryStatistics) {
+      const categories = data.categoryStatistics.map((stat) => stat.category);
+      const totalAmounts = data.categoryStatistics.map(
+        (stat) => stat.totalAmount
+      );
 
-			const backgroundColors = [];
-			const borderColors = [];
+      const backgroundColors = [];
+      const borderColors = [];
 
-			categories.forEach((category) => {
-				if (category === "saving") {
-					backgroundColors.push("rgba(75, 192, 192)");
-					borderColors.push("rgba(75, 192, 192)");
-				} else if (category === "expense") {
-					backgroundColors.push("rgba(255, 99, 132)");
-					borderColors.push("rgba(255, 99, 132)");
-				} else if (category === "investment") {
-					backgroundColors.push("rgba(54, 162, 235)");
-					borderColors.push("rgba(54, 162, 235)");
-				}
-			});
+      categories.forEach((category) => {
+        if (category === "saving") {
+          backgroundColors.push("rgba(75, 192, 192)");
+          borderColors.push("rgba(75, 192, 192)");
+        } else if (category === "expense") {
+          backgroundColors.push("rgba(255, 99, 132)");
+          borderColors.push("rgba(255, 99, 132)");
+        } else if (category === "investment") {
+          backgroundColors.push("rgba(54, 162, 235)");
+          borderColors.push("rgba(54, 162, 235)");
+        }
+      });
 
-			setChartData((prev) => ({
-				labels: categories,
-				datasets: [
-					{
-						...prev.datasets[0],
-						data: totalAmounts,
-						backgroundColor: backgroundColors,
-						borderColor: borderColors,
-					},
-				],
-			}));
-		}
-	}, [data]);
+      setChartData((prev) => ({
+        labels: categories,
+        datasets: [
+          {
+            ...prev.datasets[0],
+            data: totalAmounts,
+            backgroundColor: backgroundColors,
+            borderColor: borderColors,
+          },
+        ],
+      }));
+    }
+  }, [data]);
   const chartOptions = {
     plugins: {
       legend: {
@@ -84,14 +86,14 @@ const HomePage = () => {
 
   const handleLogout = async () => {
     try {
-			await logout();
-			// Clear the Apollo Client cache FROM THE DOCS
-			// https://www.apollographql.com/docs/react/caching/advanced-topics/#:~:text=Resetting%20the%20cache,any%20of%20your%20active%20queries
-			client.resetStore();
-		} catch (error) {
-			console.error("Error logging out:", error);
-			toast.error(error.message);
-		}
+      await logout();
+      // Clear the Apollo Client cache FROM THE DOCS
+      // https://www.apollographql.com/docs/react/caching/advanced-topics/#:~:text=Resetting%20the%20cache,any%20of%20your%20active%20queries
+      client.resetStore();
+    } catch (error) {
+      console.error("Error logging out:", error);
+      toast.error(error.message);
+    }
   };
 
   return (
@@ -120,9 +122,11 @@ const HomePage = () => {
           </div>
         </div>
         <div className="flex flex-wrap w-full justify-center items-center gap-6">
-        {data?.categoryStatistics.length > 0 &&<div className="h-[330px] w-[330px] md:h-[360px] md:w-[360px] text-white">
-            <Doughnut data={chartData} options={chartOptions} />
-          </div>}
+          {data?.categoryStatistics.length > 0 && (
+            <div className="h-[330px] w-[330px] md:h-[360px] md:w-[360px] text-white">
+              <Doughnut data={chartData} options={chartOptions} />
+            </div>
+          )}
 
           <TransactionForm />
         </div>
