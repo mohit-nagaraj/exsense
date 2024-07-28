@@ -8,8 +8,8 @@ This project is designed to help you manage your expenses efficiently using Grap
 ### Setup .env file
 
 ```js
-MONGO_URI=...
-SESSION_SECRET=...
+MONGO_URI=mongodb+srv://<dish>:<dish>123@...
+SESSION_SECRET=<putur->secret123>
 ```
 
 ### Build the app
