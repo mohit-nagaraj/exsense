@@ -1,6 +1,6 @@
 const TransactionFormSkeleton = () => {
 	return (
-		<div className='h-screen max-w-xl mx-auto py-10'>
+		<div className='h-screen max-w-xl mx-auto py-10 pt-36'>
 			<h3 className='h-6 bg-gray-200 rounded animate-pulse'></h3>
 
 			<ul className='mt-5 flex gap-3'>
