@@ -11,5 +11,15 @@
 *::-webkit-scrollbar-thumb {
   border-radius: 8px;
   background-clip: content-box;
-  background: linear-gradient(rgb(99, 9, 29), rgb(10, 66, 155),rgb(19, 109, 53));
+  background: linear-gradient(
+    rgb(99, 9, 29),
+    rgb(10, 66, 155),
+    rgb(19, 109, 53)
+  );
+}
+
+input[type=number]::-webkit-inner-spin-button,  
+input[type=number]::-webkit-outer-spin-button {  
+    -webkit-appearance: none;  
+    margin: 0;  
 }

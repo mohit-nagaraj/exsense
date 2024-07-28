@@ -3,7 +3,9 @@ import { CREATE_TRANSACTION } from "../graphql/mutations/transaction.mutation";
 import toast from "react-hot-toast";
 
 const TransactionForm = () => {
-	const [createTransaction, { loading }] = useMutation(CREATE_TRANSACTION);
+	const [createTransaction, { loading }] = useMutation(CREATE_TRANSACTION, {
+		refetchQueries: ["GetTransactions", "GetTransactionStatistics"],
+	});
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -120,6 +122,7 @@ const TransactionForm = () => {
 						name='amount'
 						type='number'
 						placeholder='150'
+						onWheel={(e) => e.target.blur()} // Disable mouse scroll
 					/>
 				</div>
 			</div>

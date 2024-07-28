@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { DELETE_TRANSACTION } from "../graphql/mutations/transaction.mutation";
 import { formatDate } from "../utils/formatDate";
+import toast from "react-hot-toast";
 
 const categoryColorMap = {
 	saving: "from-green-700 to-green-400",
@@ -20,7 +21,9 @@ const Card = ({ transaction, authUser }) => {
 	let { category, amount, location, date, paymentType, description } = transaction;
     // better than to write if else
 	const cardClass = categoryColorMap[category];
-	const [deleteTransaction, { loading }] = useMutation(DELETE_TRANSACTION);
+	const [deleteTransaction, { loading }] = useMutation(DELETE_TRANSACTION, {
+		refetchQueries: ["GetTransactions","GetTransactionStatistics"],
+	});
 
 	// Capitalize the first letter of the description
 	description = description[0]?.toUpperCase() + description.slice(1);
@@ -45,11 +48,11 @@ const Card = ({ transaction, authUser }) => {
 				<div className='flex flex-row items-center justify-between'>
 					<h2 className='text-lg font-bold text-white'>{category}</h2>
 					<div className='flex items-center gap-2'>
-						{!loading && <FaTrash className={"cursor-pointer"} onClick={handleDelete} />}
-						{loading && <div className='w-6 h-6 border-t-2 border-b-2  rounded-full animate-spin'></div>}
 						<Link to={`/transaction/${transaction._id}`}>
 							<HiPencilAlt className='cursor-pointer' size={20} />
 						</Link>
+						{!loading && <FaTrash className={"cursor-pointer"} onClick={handleDelete} />}
+						{loading && <div className='w-6 h-6 border-t-2 border-b-2  rounded-full animate-spin'></div>}
 					</div>
 				</div>
 				<p className='text-white flex items-center gap-1'>
